@@ -41,20 +41,11 @@ class National_Id_Data:
         img_loaded=Image.open(file)
         img_numpy=np.array(img_loaded).astype(np.uint8)
         return  img_numpy  # return the loaded data
-    
-    def remove_noise(self,gray, num):
-        Y, X = gray.shape
-        nearest_neigbours = [[
-            np.argmax(
-                np.bincount(
-                    gray[max(i - num, 0):min(i + num, Y), max(j - num, 0):min(j + num, X)].ravel()))
-            for j in range(X)] for i in range(Y)]
-        result = np.array(nearest_neigbours, dtype=np.uint8)
-        return result
         
     def ImagePreprocess(self,Image):
         #apply filters to get best Image
         gray=cv2.cvtColor(Image,cv2.COLOR_BGR2GRAY)
+        gray=cv2.bilateralFilter(gray,1,17,17)
         gray=cv2.resize(gray,(5000,4000),cv2.INTER_AREA)
         name=gray[1100:1900,2000:5000]
         address=gray[1800:2700,2000:5000]
@@ -64,7 +55,7 @@ class National_Id_Data:
         address=cv2.inRange(address,lowerb=0,upperb=80)
         Id_No=cv2.inRange(Id_No,lowerb=0,upperb=80)
         #end of the masking
-        
+        st.image(Id_No)
         # gray=cv2.erode(gray,kernel=np.ones((11,11)))
         # gray=remove_small_objects(gray,10,300)
         # gray=cv2.morphologyEx(gray,cv2.MORPH_CLOSE,kernel=np.ones((1,1)))
