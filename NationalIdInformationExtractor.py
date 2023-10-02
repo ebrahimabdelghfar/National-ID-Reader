@@ -45,17 +45,20 @@ class National_Id_Data:
     def ImagePreprocess(self,Image):
         #apply filters to get best Image
         gray=cv2.cvtColor(Image,cv2.COLOR_BGR2GRAY)
-        gray=cv2.bilateralFilter(gray,1,17,17)
+        gray=cv2.bilateralFilter(gray,100,5,5)
         gray=cv2.resize(gray,(5000,4000),cv2.INTER_AREA)
-        name=gray[1100:1900,2000:5000]
+        gray=cv2.dilate(gray,kernel=np.ones((1,1)),iterations=1)
+        name=gray[1150:1900,2000:5000]
         address=gray[1800:2700,2000:5000]
         Id_No=gray[2600:5000,2000:5000]
         #Masking the information of the ID
-        name=cv2.inRange(name,lowerb=0,upperb=80)
-        address=cv2.inRange(address,lowerb=0,upperb=80)
-        Id_No=cv2.inRange(Id_No,lowerb=0,upperb=80)
+        name=cv2.inRange(name,lowerb=0,upperb=70)
+        address=cv2.inRange(address,lowerb=0,upperb=70)
+        Id_No=cv2.inRange(Id_No,lowerb=0,upperb=70)
         #end of the masking
         st.image(Id_No)
+        st.image(name)
+        st.image(address)
         # gray=cv2.erode(gray,kernel=np.ones((11,11)))
         # gray=remove_small_objects(gray,10,300)
         # gray=cv2.morphologyEx(gray,cv2.MORPH_CLOSE,kernel=np.ones((1,1)))
