@@ -17,8 +17,22 @@ The code achieves its objective by employing the following methods:
 - The class defines two methods, cropLocations and cropImage, to crop specific regions of an image based on bounding box coordinates.
 - These methods are used to isolate the individual slots on the national ID card.
 ### Getting ID Card Bounding Box
-- The Get_the_Id_bbox method utilizes the card segmentation YOLO model to predict the bounding box of the entire national ID card.
+- The `Get_the_Id_bbox` method utilizes the card segmentation YOLO model to predict the bounding box of the entire national ID card.
 - The method returns the coordinates of the bounding box.
 ### Getting Slot Content
-- The Get_the_Id_content method uses the card division YOLO model to predict the locations of various slots on the national ID card.
+- The `Get_the_Id_content` method uses the card division YOLO model to predict the locations of various slots on the national ID card.
 - It returns a dictionary containing the names of slots as keys and their coordinates as values.
+### Image Filtering
+- The code includes two methods, `FilterStack` and `FilterStack2Id`, for filtering the images of the individual slots.
+- These filters apply operations like grayscale conversion, blurring, thresholding, and morphological operations to enhance the text readability.
+### Information Extraction
+- The `extract_information` method is the core of the code and is responsible for extracting information from the national ID card.
+- It follows these steps:
+  - Gets the bounding box of the card.
+  - Crops the image to focus on the card.
+  - Predicts the locations of various slots on the card.
+  - Crops each slot.
+  - Resizes and filters each slot's image.
+  - Uses OCR to read text from each slot, extracting the person's name, city, governorate, and ID number.
+# Conclusion
+The code's objective is to automate the extraction of information from a national ID card by leveraging object detection and OCR techniques. It provides a structured approach to handle the different components of the card and enhance the readability of text in each slot. The extracted information can then be used for various purposes, such as identity verification or data entry.
